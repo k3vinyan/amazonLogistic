@@ -1,0 +1,21 @@
+{
+  "manifest_version": 2,
+  "name": "Amazon Tools",
+  "version": "0.1",
+  "icons": { "16": "icon16.png",
+           "48": "icon48.png",
+          "128": "icon128.png"
+        },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.amazonlogistics.com/comp/packageSearch/*"
+      ],
+      "js": ["jquery-3.2.1.min.js", "new-window.js" ]
+    }
+  ],
+  "background":
+  {
+    "scripts": ["jquery-3.2.1.min.js"]
+  }
+}
