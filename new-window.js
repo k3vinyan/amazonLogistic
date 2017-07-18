@@ -1,40 +1,16 @@
 $(function(){
-  array = [];
-  url = 'https://www.amazonlogistics.com/comp/packageSearch';
-  string = '';
+ // //append buttons
 
-  $( document ).on('change',":input[type=checkbox]", function(){
-    $(":input[type=checkbox]").click(function(){
-      array.push($(this).closest('tr')[0].id.substring(4));
-   });
- } );
-
- //append buttons
-  $('#ShipmentSearchTable').prepend(
-    createButton("atWrongStationButton", "At Wrong Station")
+ $("#bodyContainer").before(
+   "<div style='float:right; padding: -20px 30px 0 0;'>" +
+   createButton("atWrongStationButton", "Find All At Wrong Station") +
+   createButton("deliveryAttemptedButton", "Find All Delivery Attempted") +
+   createButton("readyForFCButton", "Find All Ready For FC") +
+   createButton("outForDeliveryButton", "Final All Out For Delivery") +
+   createButton("readyForDepartureButton", "Find All Ready For Departure") +
+   createButton("sameDayButton", "Find All Same Day") +
+   "</div>"
   );
-  $('#ShipmentSearchTable').prepend(
-    createButton("deliveryAttemptedButton", "Delivery Attempted")
-  );
-  $('#ShipmentSearchTable').prepend(
-    createButton("departedForFCButton", "Departed For FC")
-  );
-  $("#ShipmentSearchTable").prepend(
-    createButton("outForDeliveryButton", "Out For Delivery")
-  );
-  $('#ShipmentSearchTable').prepend(
-    createButton("readyForFCButton", "Ready For FC")
-  );
-  $('#ShipmentSearchTable').prepend(
-    createButton("readyForDepartureButton", "Ready For Departure")
-  );
-  $('#ShipmentSearchTable').prepend(
-    createButton("newWindowButton", "Open New Window")
-  );
-  $('#ShipmentSearchTable').prepend(
-    createButton("sameDayButton", "Same Day Packages")
-  );
-
 
   //find functions
   $("#atWrongStationButton").click(function(){
@@ -43,55 +19,35 @@ $(function(){
   $("#deliveryAttemptedButton").click(function(){
     findAll("Delivery Attempted");
   });
-  $("#departedForFCButton").click(function(){
-    findAll("Departed For FC");
-  });
   $("#outForDeliveryButton").click(function(){
-    findAll("Out For Delivery");
+    findAll("Out for Delivery");
   });
   $("#readyForFCButton").click(function(){
-    findAll("Ready For FC");
+    findAll("Ready For FC Return");
   });
   $("#readyForDepartureButton").click(function(){
     findAll("Ready for Departure");
   });
   $("#newWindowButton").click(function(){
-    findAll("Ready for Departure");
+    openNewWindow();
   });
   $("#sameDayButton").click(function(){
     findSameDay();
   })
-
-
-
-
 
   function createButton(id, value, clas){
     var id = id;
     var value = value;
     var string;
     var clas;
-    string = "<input id='" + id + "' type='button' value='" + value + "' ></button>";
+    var margin = "'margin-right: 5px;'"
+    string = "<input id='" + id + "' type='button' value='" + value +
+    "' style=" + margin +
+    " ></button>";
+    console.log(string);
     return string;
 
   };
-
-  // function createButton(id, value, color, bgColor, padding){
-  //   var id = id;
-  //   var value = value;
-  //   var color = color;
-  //   var bgColor = bgColor;
-  //   var padding = padding;
-  //
-  //   var string;
-  //
-  //   string = "<input id='" + id + "' type='button' value='" + value +
-  //     "' style='" + color + "; " + "background-color:" + bgColor + "; " + "padding:" +
-  //     padding + "';></button>";
-  //
-  //     console.log(string);
-  //     return string;
-  // };
 
   function findAll(status){
     var status;
@@ -120,12 +76,11 @@ $(function(){
       }
     }
     for(var i = 0; i < odd.length; i++){
-      if( (odd[i].children[18].innerText) == "Same" ){
+      if( (odd[i].children[5].innerText) == "Same" ){
         $(odd[i].children[0].children[0]).attr('checked', true);
       }
     }
   }
-
 
 
   function openNewWindow(){
@@ -133,6 +88,8 @@ $(function(){
     var even = $('.even');
     var odd = $('.odd');
     var input;
+    url = 'https://www.amazonlogistics.com/comp/packageSearch';
+    string = '';
 
 
     for(var i =0; i < even.length; i++){
@@ -156,25 +113,34 @@ $(function(){
     }
   }
 
+ //  $( document ).on('change',":input[type=checkbox]", function(){
+ //    $(":input[type=checkbox]").click(function(){
+ //      array.push($(this).closest('tr')[0].id.substring(4));
+ //   });
+ // } );
 
 
-  $('#clearButton').click(function(){
-    array = [];
-    string = "";
-    console.log(array);
-    searchRdyForDepart();
-  });
+  // function createButton(id, value, color, bgColor, padding){
+  //   var id = id;
+  //   var value = value;
+  //   var color = color;
+  //   var bgColor = bgColor;
+  //   var padding = padding;
+  //
+  //   var string;
+  //
+  //   string = "<input id='" + id + "' type='button' value='" + value +
+  //     "' style='" + color + "; " + "background-color:" + bgColor + "; " + "padding:" +
+  //     padding + "';></button>";
+  //
+  //     console.log(string);
+  //     return string;
+  // };
 
-
-  // $('#newWindowButton').click(function(){
-  //   string = array.toString().replace(/,/g, " ");
-  //   var input;
-  //   input = prompt("Ctrl+C the TBAs:", string);
-  //   if(input === null){
-  //     return;
-  //   }else {
-  //     window.open(url, "", "width=1200");
-  //   	return false;
-  //   }
+  // $('#clearButton').click(function(){
+  //   array = [];
+  //   string = "";
+  //   console.log(array);
+  //   searchRdyForDepart();
   // });
 });
