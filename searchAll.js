@@ -3,7 +3,7 @@ $(function(){
  //append buttons to page
  $("#bodyContainer").before(
    "<div style='float:right; padding: -20px 30px 0 0; border-style: solid; border-color: #DDDDDD;'>" +
-   optionButton("clearButton", " SEARCH ALL ", '#FFFFFF', "#698EDA", "3px") +
+   optionButton("searchAllButton", " SEARCH ALL ", '#FFFFFF', "#698EDA", "3px") +
    createButton("atStationButton", "At Station") +
    createButton("delayedAtStationButton", "Delayed at Station / Hold for Redelivery") +
    createButton("atWrongStationButton", "Wrong Station") +
@@ -15,10 +15,10 @@ $(function(){
    "</div>"
   );
   $('#ShipmentSearchTable').prepend(
-    optionButton("clearButton", " CLEAR ", '#FFFFFF', "#e50000", "5px")
+    optionButton('clearButton', ' CLEAR ', '#FFFFFF', '#e50000', '5px')
   );
   $('#ShipmentSearchTable').prepend(
-    optionButton("newWindowButton", "GET TBA(S)", '#FFFFFF', "#698EDA", "5px")
+    optionButton('newWindowButton', 'GET TBA(S)', '#FFFFFF', '#698EDA', '5px')
   );
 
   //find functions
@@ -46,6 +46,7 @@ $(function(){
   });
   $("#newWindowButton").click(function(){
     openNewWindow();
+    console.log("dog");
   });
   $("#sameDayButton").click(function(){
     findSameDay();
@@ -132,12 +133,13 @@ $(function(){
     	return false;
     }
   }
-
-  $(':checkbox').change(function() {
-    $("#testButton").click(function(){
-      $('input:checkbox').removeAttr('checked');
-    })
-  });
+ //
+ // $(':checkbox').change(function() {
+ //    $("#clearButton").click(function(){
+ //      $('input:checkbox').removeAttr('checked');
+ //    })
+ //    console.log("dog");
+ //  });
 
   //create button with additonal options
   function optionButton(id, value, color, bgColor, padding){
