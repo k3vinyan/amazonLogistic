@@ -2,8 +2,8 @@ $(function(){
  // //append buttons
 
  $("#bodyContainer").before(
-   "<div style='float:right; padding: -20px 30px 0 0;'>" +
-   optionButton("findAllButton", "Find All", '#FFFFFF', "#698EDA", "3px") +
+   "<div style='float:right; padding: -20px 30px 0 0; border-style: solid; border-color: #DDDDDD;'>" +
+   optionButton("clearButton", " SEARCH ALL ", '#FFFFFF', "#698EDA", "3px") +
    createButton("atStationButton", "At Station") +
    createButton("delayedAtStationButton", "Delayed at Station / Hold for Redelivery") +
    createButton("atWrongStationButton", "Wrong Station") +
@@ -16,8 +16,13 @@ $(function(){
   );
 
   $('#ShipmentSearchTable').prepend(
-    optionButton("newWindowButton", "Get TBAs", '#FFFFFF', "#698EDA", "5px")
+     optionButton("clearButton", " CLEAR ", '#FFFFFF', "#e50000", "5px")
   );
+  $('#ShipmentSearchTable').prepend(
+    optionButton("newWindowButton", "GET TBA(S)", '#FFFFFF', "#698EDA", "5px")
+  );
+
+
 
   //work in process
   // $('#ShipmentSearchTable').append(
@@ -53,7 +58,12 @@ $(function(){
   });
   $("#sameDayButton").click(function(){
     findSameDay();
-  })
+  });
+  $('#clearButton').click(function(){
+    console.log("yes");
+    $('input:checkbox').removeAttr('checked');
+  });
+
   $("#flexButton").click(function(){
     convertToFlex();
   }).prop("disabled", true);
@@ -74,8 +84,10 @@ $(function(){
     var margin = "'margin-right: 5px;'"
     string = "<input id='" + id + "' type='button' value='" + value +
     "' style=" + margin +
+    //" background-color: #698EDA; " + "border: none; color: #FFFFFF'" +
     " ></button>";
 
+    console.log(string);
     return string;
 
   };
