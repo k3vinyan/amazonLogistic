@@ -11,7 +11,7 @@
       "matches": [
         "https://www.amazonlogistics.com/comp/packageSearch/*"
       ],
-      "js": ["jquery-3.2.1.min.js", "new-window.js" ]
+      "js": ["jquery-3.2.1.min.js", "searchAll.js" ]
     }
   ],
   "background":
