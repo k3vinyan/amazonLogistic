@@ -15,7 +15,7 @@ $(function(){
    "</div>"
   );
   $('#ShipmentSearchTable').prepend(
-    optionButton('clearButton', ' CLEAR ', '#FFFFFF', '#e50000', '5px')
+    optionButton('clearButton', ' CLEAR ', '#FFFFFF', '#cc1818', '5px')
   );
   $('#ShipmentSearchTable').prepend(
     optionButton('newWindowButton', 'GET TBA(S)', '#FFFFFF', '#698EDA', '5px')
