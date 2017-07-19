@@ -1,6 +1,6 @@
 $(function(){
- // //append buttons
 
+ //append buttons to page
  $("#bodyContainer").before(
    "<div style='float:right; padding: -20px 30px 0 0; border-style: solid; border-color: #DDDDDD;'>" +
    optionButton("clearButton", " SEARCH ALL ", '#FFFFFF', "#698EDA", "3px") +
@@ -14,21 +14,12 @@ $(function(){
    createButton("sameDayButton", "Same Day") +
    "</div>"
   );
-
   $('#ShipmentSearchTable').prepend(
-     optionButton("clearButton", " CLEAR ", '#FFFFFF', "#e50000", "5px")
+    optionButton("clearButton", " CLEAR ", '#FFFFFF', "#e50000", "5px")
   );
   $('#ShipmentSearchTable').prepend(
     optionButton("newWindowButton", "GET TBA(S)", '#FFFFFF', "#698EDA", "5px")
   );
-
-
-
-  //work in process
-  // $('#ShipmentSearchTable').append(
-  //   optionButton("flexButton", "Convert to Flex", '#FFFFFF', "#CC0000", "5px")
-  // );
-
 
   //find functions
   $("#atWrongStationButton").click(function(){
@@ -60,22 +51,10 @@ $(function(){
     findSameDay();
   });
   $('#clearButton').click(function(){
-    console.log("yes");
     $('input:checkbox').removeAttr('checked');
   });
 
-  $("#flexButton").click(function(){
-    convertToFlex();
-  }).prop("disabled", true);
-
-  //work in process
-  function convertToFlex(){
-    findAll("Ready for Departure");
-    if($('input:checked').length > 3){
-      $(":input[value=\"RollBack Status\"]").trigger("click");
-    }
-  };
-
+  //create button function
   function createButton(id, value, clas){
     var id = id;
     var value = value;
@@ -83,15 +62,12 @@ $(function(){
     var clas;
     var margin = "'margin-right: 5px;'"
     string = "<input id='" + id + "' type='button' value='" + value +
-    "' style=" + margin +
-    //" background-color: #698EDA; " + "border: none; color: #FFFFFF'" +
-    " ></button>";
-
-    console.log(string);
+    "' style=" + margin +" ></button>";
     return string;
-
   };
 
+
+  //method to checked all objeects with corresponding status
   function findAll(status){
     var status;
     var even = $('.even');
@@ -109,6 +85,7 @@ $(function(){
     }
   };
 
+  //method to checked all sameDay
   function findSameDay(){
     var even = $('.even');
     var odd = $('.odd');
@@ -125,7 +102,7 @@ $(function(){
     }
   }
 
-
+  //collects checked TBA and returns it to a prompt and launch new window
   function openNewWindow(){
     array = [];
     var even = $('.even');
@@ -162,20 +139,35 @@ $(function(){
     })
   });
 
+  //create button with additonal options
   function optionButton(id, value, color, bgColor, padding){
     var id = id;
     var value = value;
     var color = color;
     var bgColor = bgColor;
     var padding = padding;
-
     var string;
 
     string = "<input id='" + id + "' type='button' value='" + value +
-      "' style='" +"color: " + color + "; " + "background-color:" + bgColor + "; " + "padding: " +
-      padding + "; border-style: none;'></button>";
+      "' style='" +"color: " + color + "; " + "background-color:" + bgColor +
+      "; " + "padding: " + padding + "; border-style: none;'></button>";
 
       return string;
   };
+
+  //flex button work in process.......
+  // $('#ShipmentSearchTable').append(
+  //   optionButton("flexButton", "Convert to Flex", '#FFFFFF', "#CC0000", "5px")
+  // );
+  // $("#flexButton").click(function(){
+  //   convertToFlex();
+  // }).prop("disabled", true);
+  //
+  // function convertToFlex(){
+  //   findAll("Ready for Departure");
+  //   if($('input:checked').length > 3){
+  //     $(":input[value=\"RollBack Status\"]").trigger("click");
+  //   }
+  // };
 
 });
