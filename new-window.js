@@ -3,19 +3,39 @@ $(function(){
 
  $("#bodyContainer").before(
    "<div style='float:right; padding: -20px 30px 0 0;'>" +
-   createButton("atWrongStationButton", "Find All At Wrong Station") +
-   createButton("deliveryAttemptedButton", "Find All Delivery Attempted") +
-   createButton("readyForFCButton", "Find All Ready For FC") +
-   createButton("outForDeliveryButton", "Final All Out For Delivery") +
-   createButton("readyForDepartureButton", "Find All Ready For Departure") +
-   createButton("sameDayButton", "Find All Same Day") +
+   optionButton("findAllButton", "Find All", '#FFFFFF', "#698EDA", "3px") +
+   createButton("atStationButton", "At Station") +
+   createButton("delayedAtStationButton", "Delayed at Station / Hold for Redelivery") +
+   createButton("atWrongStationButton", "Wrong Station") +
+   createButton("deliveryAttemptedButton", "Delivery Attempted") +
+   createButton("readyForFCButton", "Ready For FC") +
+   createButton("outForDeliveryButton", "Out For Delivery") +
+   createButton("readyForDepartureButton", "Ready For Departure") +
+   createButton("sameDayButton", "Same Day") +
    "</div>"
   );
+
+  $('#ShipmentSearchTable').prepend(
+    optionButton("newWindowButton", "Get TBAs", '#FFFFFF', "#698EDA", "5px")
+  );
+
+  //work in process
+  // $('#ShipmentSearchTable').append(
+  //   optionButton("flexButton", "Convert to Flex", '#FFFFFF', "#CC0000", "5px")
+  // );
+
 
   //find functions
   $("#atWrongStationButton").click(function(){
     findAll("At Wrong Station");
   });
+  $("#atStationButton").click(function(){
+    findAll("At Station");
+  });
+  $("#delayedAtStationButton").click(function(){
+    findAll("Delayed at Station");
+    findAll("Hold for Redelivery");
+  })
   $("#deliveryAttemptedButton").click(function(){
     findAll("Delivery Attempted");
   });
@@ -34,6 +54,17 @@ $(function(){
   $("#sameDayButton").click(function(){
     findSameDay();
   })
+  $("#flexButton").click(function(){
+    convertToFlex();
+  }).prop("disabled", true);
+
+  //work in process
+  function convertToFlex(){
+    findAll("Ready for Departure");
+    if($('input:checked').length > 3){
+      $(":input[value=\"RollBack Status\"]").trigger("click");
+    }
+  };
 
   function createButton(id, value, clas){
     var id = id;
@@ -44,7 +75,7 @@ $(function(){
     string = "<input id='" + id + "' type='button' value='" + value +
     "' style=" + margin +
     " ></button>";
-    console.log(string);
+
     return string;
 
   };
@@ -113,34 +144,26 @@ $(function(){
     }
   }
 
- //  $( document ).on('change',":input[type=checkbox]", function(){
- //    $(":input[type=checkbox]").click(function(){
- //      array.push($(this).closest('tr')[0].id.substring(4));
- //   });
- // } );
+  $(':checkbox').change(function() {
+    $("#testButton").click(function(){
+      $('input:checkbox').removeAttr('checked');
+    })
+  });
 
+  function optionButton(id, value, color, bgColor, padding){
+    var id = id;
+    var value = value;
+    var color = color;
+    var bgColor = bgColor;
+    var padding = padding;
 
-  // function createButton(id, value, color, bgColor, padding){
-  //   var id = id;
-  //   var value = value;
-  //   var color = color;
-  //   var bgColor = bgColor;
-  //   var padding = padding;
-  //
-  //   var string;
-  //
-  //   string = "<input id='" + id + "' type='button' value='" + value +
-  //     "' style='" + color + "; " + "background-color:" + bgColor + "; " + "padding:" +
-  //     padding + "';></button>";
-  //
-  //     console.log(string);
-  //     return string;
-  // };
+    var string;
 
-  // $('#clearButton').click(function(){
-  //   array = [];
-  //   string = "";
-  //   console.log(array);
-  //   searchRdyForDepart();
-  // });
+    string = "<input id='" + id + "' type='button' value='" + value +
+      "' style='" +"color: " + color + "; " + "background-color:" + bgColor + "; " + "padding: " +
+      padding + "; border-style: none;'></button>";
+
+      return string;
+  };
+
 });
