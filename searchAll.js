@@ -125,11 +125,11 @@ $(function(){
       }
     }
     string = array.toString().replace(/,/g, "\n");
-    input = prompt("Ctrl+C the TBAs:", string)
+    input = prompt("Ctrl + C to copy TBA(s)", string)
     if(input === null){
       return;
     }else {
-      window.open(url, "", "width=1200");
+      window.open(url, "Hello", "width=1200");
     	return false;
     }
   }
