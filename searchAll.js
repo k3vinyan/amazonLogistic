@@ -15,7 +15,7 @@ $(function(){
    "</div>"
   );
   $('#ShipmentSearchTable').prepend(
-    optionButton('sortRouteButton', 'Sort Route', '#FFFFFF', '#3CB371', '5px')
+    optionButton('sortRouteButton', 'SORT ROUTE', '#FFFFFF', '#3CB371', '5px')
   );
   $('#ShipmentSearchTable').prepend(
     optionButton('clearButton', ' CLEAR ', '#FFFFFF', '#cc1818', '5px')
@@ -23,7 +23,6 @@ $(function(){
   $('#ShipmentSearchTable').prepend(
     optionButton('newWindowButton', 'GET TBA(S)', '#FFFFFF', '#698EDA', '5px')
   );
-
 
   //find functions
   $("#atWrongStationButton").click(function(){
@@ -50,7 +49,6 @@ $(function(){
   });
   $("#newWindowButton").click(function(){
     openNewWindow();
-    console.log("dog");
   });
   $("#sameDayButton").click(function(){
     findSameDay();
@@ -215,6 +213,10 @@ $(function(){
 
     array = bubbleSort(tempArray);
     return array;
+  }
+
+  function counter(){
+
   }
 
   //flex button work in process.......
