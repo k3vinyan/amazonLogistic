@@ -1,5 +1,11 @@
 $(function(){
 
+
+  var accept = new Audio('accept.wav');
+  var buzzer = new Audio('buzzer.wav');
+
+//counter for focusOn
+var turnOn = false;
  //append buttons to page
  $("#bodyContainer").before(
    "<div style='float:right; padding: -20px 30px 0 0; border-style: solid; border-color: #DDDDDD;'>" +
@@ -13,6 +19,9 @@ $(function(){
    createButton("readyForDepartureButton", "Ready For Departure") +
    createButton("sameDayButton", "Same Day") +
    "</div>"
+  );
+  $('#ShipmentSearchTable').prepend(
+    optionButton('focusButton', 'FOCUS ON', '#FFFFFF', '#4c177d', '5px')
   );
   $('#ShipmentSearchTable').prepend(
     optionButton('sortRouteButton', 'SORT ROUTE', '#FFFFFF', '#3CB371', '5px')
@@ -58,7 +67,11 @@ $(function(){
   });
   $('#sortRouteButton').click(function(){
     alertCompanyWindow();
-  })
+  });
+  $('#focusButton').click(function(){
+    focus();
+  });
+
 
   //create button function
   function createButton(id, value, clas){
@@ -153,8 +166,7 @@ $(function(){
  $(':checkbox').change(function() {
     $("#clearButton").click(function(){
       $('input:checkbox').removeAttr('checked');
-    })
-    console.log("dog");
+    });
   });
 
   //create button with additonal options
@@ -215,9 +227,38 @@ $(function(){
     return array;
   }
 
-  function counter(){
-
+  function focus(){
+      counter ++;
+      truthValue = toggleOnOff(turnOn);
+      console.log(truthValue);
+      if(truthValue){
+        $('#focusButton').attr('value', 'FOCUS ON');
+        $('#focusButton').css('background-color', '#4C177D');
+        $("#shipmentSearchIds").keydown(keydownHandler);
+      } else {
+          $('#focusButton').attr('value', 'FOCUS OFF');
+          $('#focusButton').css('background-color', '#BDBDBD');
+        $("#shipmentSearchIds").unbind('keydown', keydownHandler);
+      }
   }
+
+  var counter = 0;
+  function toggleOnOff(){
+    if(counter%2 == 0){
+      onOff = true;
+    }
+    else if(counter%2 !== 0){
+      onOff = false;
+    }
+    return onOff;
+  }
+
+  function keydownHandler(e){
+    if(e.keyCode == 13){
+      $("#searchSubmit").click();
+    }
+  }
+
 
   //flex button work in process.......
   // $('#ShipmentSearchTable').append(
