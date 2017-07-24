@@ -15,11 +15,15 @@ $(function(){
    "</div>"
   );
   $('#ShipmentSearchTable').prepend(
+    optionButton('sortRouteButton', 'Sort Route', '#FFFFFF', '#3CB371', '5px')
+  );
+  $('#ShipmentSearchTable').prepend(
     optionButton('clearButton', ' CLEAR ', '#FFFFFF', '#cc1818', '5px')
   );
   $('#ShipmentSearchTable').prepend(
     optionButton('newWindowButton', 'GET TBA(S)', '#FFFFFF', '#698EDA', '5px')
   );
+
 
   //find functions
   $("#atWrongStationButton").click(function(){
@@ -54,6 +58,9 @@ $(function(){
   $('#clearButton').click(function(){
     $('input:checkbox').removeAttr('checked');
   });
+  $('#sortRouteButton').click(function(){
+    alertCompanyWindow();
+  })
 
   //create button function
   function createButton(id, value, clas){
@@ -133,13 +140,24 @@ $(function(){
     	return false;
     }
   }
- //
- // $(':checkbox').change(function() {
- //    $("#clearButton").click(function(){
- //      $('input:checkbox').removeAttr('checked');
- //    })
- //    console.log("dog");
- //  });
+
+  function alertCompanyWindow(){
+    array = SortVRoute();
+    let string = "";
+
+    for(var i = 0; i < array.length; i++){
+      string += "Route: " + array[i].route +
+                "   " + array[i].company + "\n"
+    }
+    alert(string);
+  }
+
+ $(':checkbox').change(function() {
+    $("#clearButton").click(function(){
+      $('input:checkbox').removeAttr('checked');
+    })
+    console.log("dog");
+  });
 
   //create button with additonal options
   function optionButton(id, value, color, bgColor, padding){
@@ -156,6 +174,48 @@ $(function(){
 
       return string;
   };
+
+  function bubbleSort(arr){
+   var len = arr.length;
+   var num1 = 0;
+   var num2 = 0;
+   for (var i = len-1; i>=0; i--){
+     for(var j = 1; j<=i; j++){
+       num1 = parseInt((arr[j-1]).route.replace(/\D/g, ""));
+       num2 = parseInt((arr[j]).route.replace(/\D/g, ""));
+       if( num1 > num2 ){
+           var temp = arr[j-1];
+           arr[j-1] = arr[j];
+           arr[j] = temp;
+        }
+     }
+   }
+   return arr;
+}
+
+  function SortVRoute(){
+    array = [];
+    tempArray = [];
+
+    var even = $('.even');
+    var odd = $('.odd');
+    var object = {};
+
+    for(var i =0; i < even.length; i++){
+      let r = even[i].children[16].innerText;
+      let c = even[i].children[19].innerText;
+      tempArray.push(object[i] = { route: r, company: c });
+    }
+
+    for(var i =0; i < odd.length; i++){
+      let r = odd[i].children[16].innerText;
+      let c = odd[i].children[19].innerText;
+      tempArray.push(object[i] = { route: r, company: c });
+    }
+
+    array = bubbleSort(tempArray);
+    return array;
+  }
 
   //flex button work in process.......
   // $('#ShipmentSearchTable').append(
