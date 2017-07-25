@@ -1,28 +1,14 @@
 $(function(){
 
-
   var accept = new Audio('./accept.mp3');
   var buzzer = new Audio('buzzer.wav');
-$('#bodyContainer').append("<span id='audio'></span>");
-$('#audio').html('<audio autoplay><source src="./accept.mp3"></audio>');
-//counter for focusOn
-var turnOn = false;
+  $('#bodyContainer').append("<span id='audio'></span>");
+  $('#audio').html('<audio autoplay><source src="./accept.mp3"></audio>');
+  //counter for focusOn
+  var switchForFocus = false;
+  var counterForFocus = 0;
 
-accept.addEventListener('loadeddata', function() {
-    playPromise = accept.play();
-    console.log("cat");
-});
-accept.onloadeddata = function(){
-  console.log("loaded");
-  accept.play();
-}
-
-accept.addEventListener('load', function() {
-    playPromise = accept.play();
-    console.log("cat");
-});
-
-
+  var recordArray = [];
 
  //append buttons to page
  $("#bodyContainer").before(
@@ -37,6 +23,9 @@ accept.addEventListener('load', function() {
    createButton("readyForDepartureButton", "Ready For Departure") +
    createButton("sameDayButton", "Same Day") +
    "</div>"
+  );
+  $('#ShipmentSearchTable').prepend(
+    optionButton('getRecordButton', 'GET FOCUS TBA', '#FFFFFF', '#BDBDBD', '5px')
   );
   $('#ShipmentSearchTable').prepend(
     optionButton('focusButton', 'FOCUS OFF', '#FFFFFF', '#BDBDBD', '5px')
@@ -82,6 +71,8 @@ accept.addEventListener('load', function() {
   });
   $('#clearButton').click(function(){
     $('input:checkbox').removeAttr('checked');
+    recordArray = [];
+    arrayNotEmpty();
   });
   $('#sortRouteButton').click(function(){
     alertCompanyWindow();
@@ -89,6 +80,10 @@ accept.addEventListener('load', function() {
   $('#focusButton').click(function(){
     focus();
   });
+  $('#getRecordButton').click(function(){
+    getRecord();
+  });
+
 
 
   //create button function
@@ -141,6 +136,7 @@ accept.addEventListener('load', function() {
 
   //collects checked TBA and returns it to a prompt and launch new window
   function openNewWindow(){
+
     array = [];
     var even = $('.even');
     var odd = $('.odd');
@@ -186,6 +182,8 @@ accept.addEventListener('load', function() {
       $('input:checkbox').removeAttr('checked');
     });
   });
+
+
 
   //create button with additonal options
   function optionButton(id, value, color, bgColor, padding){
@@ -246,9 +244,9 @@ accept.addEventListener('load', function() {
   }
 
   function focus(){
-      counter ++;
-      truthValue = toggleOnOff(turnOn);
-      console.log(truthValue);
+      counterForFocus ++;
+      truthValue = toggleOnOff(counterForFocus, switchForFocus);
+
       if(truthValue){
         $('#focusButton').attr('value', 'FOCUS ON');
         $('#focusButton').css('background-color', '#4C177D');
@@ -260,28 +258,60 @@ accept.addEventListener('load', function() {
       }
   }
 
-  var counter = 0;
-  function toggleOnOff(){
+  function toggleOnOff(counter, switcher){
     if(counter%2 == 0){
-      onOff = true;
+      switcher = true;
     }
     else if(counter%2 !== 0){
-      onOff = false;
+      switcher = false;
     }
-    return onOff;
+    return switcher;
   }
 
   function keydownHandler(e){
     if(e.keyCode == 13){
-      console.log("monkey");
       $("#shipmentSearchId").select();
       $("#searchSubmit").click(function(){
       });
       setTimeout(function(){
         $("#shipmentSearchId").select();
+        recordTBA();
       }, 1000);
     }
+  };
+
+  function arrayNotEmpty(){
+    console.log(recordArray.length);
+    if(recordArray.length > 0){
+      $('#getRecordButton').css('background-color', '#CF3523');
+    } else {
+      $('#getRecordButton').css('background-color', '#BDBDBD');
+    }
   }
+
+  function recordTBA(){
+
+
+    let input = $("#shipmentSearchId").keypress();
+    console.log(input[0].value);
+
+    if(input[0].value.length == 15){
+      recordArray.push(input[0].value);
+    }
+      arrayNotEmpty();
+  }
+
+  function getRecord(){
+    url = 'https://www.amazonlogistics.com/comp/packageSearch';
+    string = recordArray.toString().replace(/,/g, "\n");
+    input = prompt("Ctrl + C to copy TBA(s) | Press CLEAR to reset TBAs", string)
+    if(input === null){
+      return;
+    }else {
+      window.open(url, "width=1200");
+      return false;
+    }
+  };
 
 
   //flex button work in process.......
