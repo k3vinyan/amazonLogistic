@@ -1,11 +1,29 @@
 $(function(){
 
 
-  var accept = new Audio('accept.wav');
+  var accept = new Audio('./accept.mp3');
   var buzzer = new Audio('buzzer.wav');
-
+$('#bodyContainer').append("<span id='audio'></span>");
+$('#audio').html('<audio autoplay><source src="./accept.mp3"></audio>');
 //counter for focusOn
 var turnOn = false;
+
+accept.addEventListener('loadeddata', function() {
+    playPromise = accept.play();
+    console.log("cat");
+});
+accept.onloadeddata = function(){
+  console.log("loaded");
+  accept.play();
+}
+
+accept.addEventListener('load', function() {
+    playPromise = accept.play();
+    console.log("cat");
+});
+
+
+
  //append buttons to page
  $("#bodyContainer").before(
    "<div style='float:right; padding: -20px 30px 0 0; border-style: solid; border-color: #DDDDDD;'>" +
@@ -21,7 +39,7 @@ var turnOn = false;
    "</div>"
   );
   $('#ShipmentSearchTable').prepend(
-    optionButton('focusButton', 'FOCUS ON', '#FFFFFF', '#4c177d', '5px')
+    optionButton('focusButton', 'FOCUS OFF', '#FFFFFF', '#BDBDBD', '5px')
   );
   $('#ShipmentSearchTable').prepend(
     optionButton('sortRouteButton', 'SORT ROUTE', '#FFFFFF', '#3CB371', '5px')
@@ -234,11 +252,11 @@ var turnOn = false;
       if(truthValue){
         $('#focusButton').attr('value', 'FOCUS ON');
         $('#focusButton').css('background-color', '#4C177D');
-        $("#shipmentSearchIds").keydown(keydownHandler);
+        $("#shipmentSearchId").keydown(keydownHandler);
       } else {
           $('#focusButton').attr('value', 'FOCUS OFF');
           $('#focusButton').css('background-color', '#BDBDBD');
-        $("#shipmentSearchIds").unbind('keydown', keydownHandler);
+        $("#shipmentSearchId").unbind('keydown', keydownHandler);
       }
   }
 
@@ -255,7 +273,13 @@ var turnOn = false;
 
   function keydownHandler(e){
     if(e.keyCode == 13){
-      $("#searchSubmit").click();
+      console.log("monkey");
+      $("#shipmentSearchId").select();
+      $("#searchSubmit").click(function(){
+      });
+      setTimeout(function(){
+        $("#shipmentSearchId").select();
+      }, 1000);
     }
   }
 
