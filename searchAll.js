@@ -1,14 +1,12 @@
 $(function(){
 
-  // var audio = document.createElement('audio');
-  // audio.src = "accept.mp3";
-  // audio.preload = "auto";
 
   var accept = new Audio();
   var buzzer = new Audio();
 
   accept.src = "https://drive.google.com/uc?export=download&id=0B93xTaskz1_WMVhGcGJDR29xR0E";
   buzzer.src = "https://drive.google.com/uc?export=download&id=0B93xTaskz1_WZ3l3V2NJeDdWMDg";
+
   //counter for focusOn
   var switchForFocus = false;
   var counterForFocus = 0;
@@ -27,7 +25,6 @@ $(function(){
    createButton("outForDeliveryButton", "Out For Delivery") +
    createButton("readyForDepartureButton", "Ready For Departure") +
    createButton("sameDayButton", "Same Day") +
-   createButton("playButton", "play") +
    "</div>"
   );
   $('#ShipmentSearchTable').prepend(
@@ -89,12 +86,6 @@ $(function(){
   $('#getRecordButton').click(function(){
     getRecord();
   });
-  $('#playButton').click(function(){
-    var even = $('.even');
-    console.log((even[0].children[16].innerText))
-  })
-
-
 
   //create button function
   function createButton(id, value, clas){
