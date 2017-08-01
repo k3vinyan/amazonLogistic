@@ -12,11 +12,11 @@
       "matches": [
         "*://www.amazonlogistics.com/comp/packageSearch/*"
       ],
-      "js": ["jquery-3.2.1.min.js", "searchAll.js" ]
+      "js": ["jquery-3.2.1.min.js", "howler.js", "searchAll.js" ]
     }
   ],
   "background":
   {
-    "scripts": ["jquery-3.2.1.min.js"]
+    "scripts": ["jquery-3.2.1.min.js", "howler.js"]
   }
 }

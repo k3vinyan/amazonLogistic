@@ -1,9 +1,14 @@
 $(function(){
 
-  var accept = new Audio('./accept.mp3');
-  var buzzer = new Audio('buzzer.wav');
-  $('#bodyContainer').append("<span id='audio'></span>");
-  $('#audio').html('<audio autoplay><source src="./accept.mp3"></audio>');
+  // var audio = document.createElement('audio');
+  // audio.src = "accept.mp3";
+  // audio.preload = "auto";
+
+  var accept = new Audio();
+  var buzzer = new Audio();
+
+  accept.src = "https://drive.google.com/uc?export=download&id=0B93xTaskz1_WMVhGcGJDR29xR0E";
+  buzzer.src = "https://drive.google.com/uc?export=download&id=0B93xTaskz1_WZ3l3V2NJeDdWMDg";
   //counter for focusOn
   var switchForFocus = false;
   var counterForFocus = 0;
@@ -22,6 +27,7 @@ $(function(){
    createButton("outForDeliveryButton", "Out For Delivery") +
    createButton("readyForDepartureButton", "Ready For Departure") +
    createButton("sameDayButton", "Same Day") +
+   createButton("playButton", "play") +
    "</div>"
   );
   $('#ShipmentSearchTable').prepend(
@@ -83,6 +89,10 @@ $(function(){
   $('#getRecordButton').click(function(){
     getRecord();
   });
+  $('#playButton').click(function(){
+    var even = $('.even');
+    console.log((even[0].children[16].innerText))
+  })
 
 
 
@@ -117,6 +127,12 @@ $(function(){
     }
   };
 
+  function flex(){
+    var even = $('.even');
+    var odd = $('.odd');
+
+    console.log((even[0].children[18].innerText));
+  };
   //method to checked all sameDay
   function findSameDay(){
     var even = $('.even');
@@ -246,7 +262,6 @@ $(function(){
   function focus(){
       counterForFocus ++;
       truthValue = toggleOnOff(counterForFocus, switchForFocus);
-
       if(truthValue){
         $('#focusButton').attr('value', 'FOCUS ON');
         $('#focusButton').css('background-color', '#4C177D');
@@ -290,8 +305,7 @@ $(function(){
   }
 
   function recordTBA(){
-
-
+    checkStatus();
     let input = $("#shipmentSearchId").keypress();
     console.log(input[0].value);
 
@@ -313,6 +327,19 @@ $(function(){
     }
   };
 
+  function checkStatus(){
+    let odd = $('.odd');
+    console.log(odd[0]);
+    let status = odd[0].children[18].innerText;
+    let route = odd[0].children[16].innerText.replace(/[0-9]/g, '');
+    if( status === "Between FC and Stations" || status === "At Station"){
+      if (route === "V") {
+        accept.play();
+      }
+    } else {
+      buzzer.play();
+    }
+  }
 
   //flex button work in process.......
   // $('#ShipmentSearchTable').append(
