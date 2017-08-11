@@ -1,16 +1,5 @@
 $(function(){
 
-  $(".legal-text").click(function(){
-    let access = prompt();
-
-    if(access === "password1234"){
-      startup();
-      console.log("starting up");
-    } else {
-      console.log("incorrect");
-    }
-  })
-
   function startup(){
     var accept = new Audio();
     var buzzer = new Audio();
@@ -466,7 +455,16 @@ $(function(){
     });
   }
 
+  $(".legal-text").click(function(){
+    let access = prompt();
 
+    if(access === "password1234"){
+      startup();
+      console.log("starting up");
+    } else {
+      console.log("incorrect");
+    }
+  })
 
 
 });
