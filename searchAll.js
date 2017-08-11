@@ -391,18 +391,18 @@ $(function(){
 
     for(let i = 0; i < odd.length; i++){
       route = odd[i].children[16].innerText;
-      console.log(route)
-      console.log(reg.test(route));
-      if(reg.test(route)){
+      if(!reg.test(route) && odd[i].children[16].innerText != '\xa0'){
+        console.log(odd[i].children[16].innerText)
+        console.log(!(odd[i].children[16].innerText));
         $(odd[i].children[0].children[0]).attr('checked', true);
       }
     }
 
     for(let i = 0; i < even.length; i++){
       route = even[i].children[16].innerText;
-      console.log(route)
-      console.log(reg.test(route));
-      if(reg.test(route)){
+      if(!reg.test(route) && even[i].children[16].innerText != '\xa0'){
+        console.log(odd[i].children[16].innerText)
+        console.log(even[i].children[16].innerText);
         $(even[i].children[0].children[0]).attr('checked', true);
       }
     }
