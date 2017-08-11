@@ -10,6 +10,9 @@ $(function(){
   var switchForFocus = false;
   var counterForFocus = 0;
 
+  var switchForScanAll = false;
+  var counterForScanAll = 0;
+
   var recordArray = [];
 
  //append buttons to page
@@ -33,7 +36,10 @@ $(function(){
     optionButton('getRecordButton', 'GET FOCUS TBA', '#FFFFFF', '#BDBDBD', '5px')
   );
   $('#ShipmentSearchTable').prepend(
-    optionButton('focusButton', 'FOCUS OFF', '#FFFFFF', '#BDBDBD', '5px')
+    optionButton('focusAllButton', 'FOCUS ALL OFF', '#FFFFFF', '#BDBDBD', '5px')
+  );
+  $('#ShipmentSearchTable').prepend(
+    optionButton('focusButton', 'FOCUS ONE OFF', '#FFFFFF', '#BDBDBD', '5px')
   );
   $('#ShipmentSearchTable').prepend(
     optionButton('sortRouteButton', 'SORT ROUTE', '#FFFFFF', '#3CB371', '5px')
@@ -85,6 +91,9 @@ $(function(){
   });
   $('#focusButton').click(function(){
     focus();
+  });
+  $('#focusAllButton').click(function(){
+    scanAll();
   });
   $('#getRecordButton').click(function(){
     getRecord();
@@ -266,13 +275,15 @@ $(function(){
       counterForFocus ++;
       truthValue = toggleOnOff(counterForFocus, switchForFocus);
       if(truthValue){
-        $('#focusButton').attr('value', 'FOCUS ON');
+        $('#focusButton').attr('value', 'FOCUS ONE ON');
         $('#focusButton').css('background-color', '#4C177D');
         $("#shipmentSearchId").keydown(keydownHandler);
+        $("#shipmentSearchIds").keydown(keydownHandler);
       } else {
-          $('#focusButton').attr('value', 'FOCUS OFF');
-          $('#focusButton').css('background-color', '#BDBDBD');
+        $('#focusButton').attr('value', 'FOCUS ONE OFF');
+        $('#focusButton').css('background-color', '#BDBDBD');
         $("#shipmentSearchId").unbind('keydown', keydownHandler);
+        $("#shipmentSearchIds").keydown(keydownHandler);
       }
   }
 
@@ -287,6 +298,7 @@ $(function(){
   }
 
   function keydownHandler(e){
+
     if(e.keyCode == 13){
       $("#shipmentSearchId").select();
       $("#searchSubmit").click(function(){
@@ -296,10 +308,34 @@ $(function(){
         recordTBA();
       }, 1000);
     }
+
   };
 
+ function keydownhandler2(e){
+   if(e.keyCode == 13){
+     $("#searchSubmit").click();
+     setTimeout(function(){
+       $("#shipmentSearchIds").focus();
+     }, 1000);
+   }
+ };
+
+  function scanAll(){
+    counterForScanAll++;
+
+    truthValue = toggleOnOff(counterForScanAll, switchForFocus);
+    if(truthValue){
+      $('#focusAllButton').attr('value', 'FOCUS ALL ON');
+      $('#focusAllButton').css('background-color', '#4C177D');
+      $("#shipmentSearchIds").keydown(keydownhandler2);
+    } else {
+      $('#focusAllButton').attr('value', 'FOCUS ALL OFF');
+      $('#focusAllButton').css('background-color', '#BDBDBD');
+      $("#shipmentSearchIds").keydown(keydownhandler2);
+    }
+  }
+
   function arrayNotEmpty(){
-    console.log(recordArray.length);
     if(recordArray.length > 0){
       $('#getRecordButton').css('background-color', '#CF3523');
     } else {
@@ -310,7 +346,6 @@ $(function(){
   function recordTBA(){
     checkStatus();
     let input = $("#shipmentSearchId").keypress();
-    console.log(input[0].value);
 
     if(input[0].value.length == 15){
       recordArray.push(input[0].value);
@@ -341,6 +376,10 @@ $(function(){
     } else {
       buzzer.play();
     }
+  }
+
+  function checkStatus2(){
+
   }
 
   function getAllNoRoute(){
@@ -408,19 +447,12 @@ $(function(){
     }
   }
 
-  //flex button work in process.......
-  // $('#ShipmentSearchTable').append(
-  //   optionButton("flexButton", "Convert to Flex", '#FFFFFF', "#CC0000", "5px")
-  // );
-  // $("#flexButton").click(function(){
-  //   convertToFlex();
-  // }).prop("disabled", true);
-  //
-  // function convertToFlex(){
-  //   findAll("Ready for Departure");
-  //   if($('input:checked').length > 3){
-  //     $(":input[value=\"RollBack Status\"]").trigger("click");
-  //   }
-  // };
+
+
+  $("img").click(function(){
+    window.open("https://amazon-flex.herokuapp.com/");
+  });
+
+
 
 });
