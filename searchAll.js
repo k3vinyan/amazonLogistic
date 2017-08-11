@@ -1,6 +1,5 @@
 $(function(){
 
-
   var accept = new Audio();
   var buzzer = new Audio();
 
@@ -25,6 +24,9 @@ $(function(){
    createButton("outForDeliveryButton", "Out For Delivery") +
    createButton("readyForDepartureButton", "Ready For Departure") +
    createButton("sameDayButton", "Same Day") +
+   createButton("noRouteButton", "No Route") +
+   createButton("findRouteButton", "Find Route") +
+   createButton("excludeRouteButton", "Exclude Route") +
    "</div>"
   );
   $('#ShipmentSearchTable').prepend(
@@ -42,6 +44,7 @@ $(function(){
   $('#ShipmentSearchTable').prepend(
     optionButton('newWindowButton', 'GET TBA(S)', '#FFFFFF', '#698EDA', '5px')
   );
+
 
   //find functions
   $("#atWrongStationButton").click(function(){
@@ -85,6 +88,15 @@ $(function(){
   });
   $('#getRecordButton').click(function(){
     getRecord();
+  });
+  $('#noRouteButton').click(function(){
+    getAllNoRoute();
+  });
+  $("#findRouteButton").click(function(){
+    findRoute();
+  })
+  $('#excludeRouteButton').click(function(){
+    getExcludeRoute();
   });
 
   //create button function
@@ -320,7 +332,6 @@ $(function(){
 
   function checkStatus(){
     let odd = $('.odd');
-    console.log(odd[0]);
     let status = odd[0].children[18].innerText;
     let route = odd[0].children[16].innerText.replace(/[0-9]/g, '');
     if( status === "Between FC and Stations" || status === "At Station"){
@@ -329,6 +340,71 @@ $(function(){
       }
     } else {
       buzzer.play();
+    }
+  }
+
+  function getAllNoRoute(){
+    let odd = $('.odd');
+    let even = $('.even');
+
+    for(let i = 0; i < odd.length; i++){
+      if(odd[i].children[16].innerText === '\xa0'){
+        $(odd[i].children[0].children[0]).attr('checked', true);
+      }
+    }
+
+    for(let i = 0; i < even.length; i++){
+      if(even[i].children[16].innerText === '\xa0'){
+        $(even[i].children[0].children[0]).attr('checked', true);
+      }
+    }
+  }
+
+  function findRoute(){
+    let odd = $('.odd');
+    let even = $('.even');
+    let route = "";
+    let searchRoute = prompt("Enter Route to exclude:", "Enter Route here");
+    let reg = new RegExp("[" + searchRoute + "]\\d+");
+
+    for(let i = 0; i < odd.length; i++){
+      route = odd[i].children[16].innerText;
+      if(reg.test(route)){
+        $(odd[i].children[0].children[0]).attr('checked', true);
+      }
+    }
+
+    for(let i = 0; i < even.length; i++){
+      route = even[i].children[16].innerText;
+      if(reg.test(route)){
+        $(even[i].children[0].children[0]).attr('checked', true);
+      }
+    }
+  }
+
+  function getExcludeRoute(){
+    let odd = $('.odd');
+    let even = $('.even');
+    let route = "";
+    let searchRoute = prompt("Enter Route to exclude:", "Enter Route here");
+    let reg = new RegExp("[" + searchRoute + "]\\d+");
+
+    for(let i = 0; i < odd.length; i++){
+      route = odd[i].children[16].innerText;
+      console.log(route)
+      console.log(reg.test(route));
+      if(reg.test(route)){
+        $(odd[i].children[0].children[0]).attr('checked', true);
+      }
+    }
+
+    for(let i = 0; i < even.length; i++){
+      route = even[i].children[16].innerText;
+      console.log(route)
+      console.log(reg.test(route));
+      if(reg.test(route)){
+        $(even[i].children[0].children[0]).attr('checked', true);
+      }
     }
   }
 
