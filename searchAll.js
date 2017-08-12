@@ -356,7 +356,7 @@ $(function(){
 
     function getRecord(){
       url = 'https://www.amazonlogistics.com/comp/packageSearch';
-      string = recordArray.toString().replace(/,/g, "\n");
+      string = recordArray.toString().replace(/,/g, "\n ");
       input = prompt("Ctrl + C to copy TBA(s) | Press CLEAR to reset TBAs", string)
       if(input === null){
         return;
@@ -456,15 +456,8 @@ $(function(){
   }
 
   $(".legal-text").click(function(){
-    let access = prompt();
-
-    if(access === "password1234"){
       startup();
-      console.log("starting up");
-    } else {
-      console.log("incorrect");
-    }
-  })
+  });
 
 
 });
