@@ -30,6 +30,7 @@ $(function(){
      createButton("outForDeliveryButton", "Out For Delivery") +
      createButton("readyForDepartureButton", "Ready For Departure") +
      createButton("sameDayButton", "Same Day") +
+     createButton("nonSameDayButton", "Non-Same Day") +
      createButton("noRouteButton", "No Route") +
      createButton("findRouteButton", "Find Route") +
      createButton("excludeRouteButton", "Exclude Route") +
@@ -83,6 +84,9 @@ $(function(){
     });
     $("#sameDayButton").click(function(){
       findSameDay();
+    });
+    $("#nonSameDayButton").click(function(){
+      findNonSameDay();
     });
     $('#clearButton').click(function(){
       $('input:checkbox').removeAttr('checked');
@@ -162,6 +166,22 @@ $(function(){
       }
       for(var i = 0; i < odd.length; i++){
         if( (odd[i].children[5].innerText) == "Same" ){
+          $(odd[i].children[0].children[0]).attr('checked', true);
+        }
+      }
+    }
+
+    function findNonSameDay(){
+      var even = $('.even');
+      var odd = $('.odd');
+
+      for(var i = 0; i < even.length; i++){
+        if(even[i].children[5].innerText != "Same"){
+            $(even[i].children[0].children[0]).attr('checked', true);
+        }
+      }
+      for(var i = 0; i < odd.length; i++){
+        if( (odd[i].children[5].innerText) != "Same" ){
           $(odd[i].children[0].children[0]).attr('checked', true);
         }
       }
@@ -381,10 +401,6 @@ $(function(){
       } else {
         buzzer.play();
       }
-    }
-
-    function checkStatus2(){
-
     }
 
     function getAllNoRoute(){
