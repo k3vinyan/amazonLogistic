@@ -222,13 +222,37 @@ $(function(){
     function alertCompanyWindow(){
       array = SortVRoute();
       let string = "";
+      let company = "";
+      let compareCompany = "";
 
       for(var i = 0; i < array.length; i++){
-        string += "Route: " + array[i].route +
-                  "   " + array[i].company + "\n"
+        company = array[i].company.split("/")[1];
+        if(compareCompany === "" || compareCompany === company) {
+          compareCompany = company;
+          string += "Route: " + array[i].route +
+                    "   " + company + "\n"
+        } else {
+          compareCompany = company;
+          string += "------------------------------------" + "\n" +
+          "Route: " + array[i].route +
+                    "   " + company + "\n"
+        }
+
       }
       alert(string);
     }
+
+    //   for(var i = 0; i < array.length; i++){
+    //     company = array[i].company.split("/")[1];
+    //     if(company === compareCompany){
+    //
+    //     } else {
+    //       compareCompany = company;
+    //       string += array[i].route + " " + company + "\n";
+    //     }
+    //   }
+    //   console.log(string);
+    // }
 
    $(':checkbox').change(function() {
       $("#clearButton").click(function(){
