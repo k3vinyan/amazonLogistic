@@ -16,10 +16,12 @@ $(function(){
 
     var recordArray = [];
 
+
    //append buttons to page
    $("#bodyContainer").before(
      "<div style='float:right; padding: -20px 30px 0 0; border-style: solid; border-color: #DDDDDD;'>" +
      optionButton("searchAllButton", " SEARCH ALL ", '#FFFFFF', "#698EDA", "3px") +
+     createButton("betweenStation", "Between Station") +
      createButton("atStationButton", "At Station") +
      createButton("delayedAtStationButton", "Delayed at Station / Hold for Redelivery") +
      createButton("atWrongStationButton", "Wrong Station") +
@@ -108,6 +110,9 @@ $(function(){
     $('#excludeRouteButton').click(function(){
       getExcludeRoute();
     });
+    $('#betweenStation').click(function(){
+      getBetweenStation();
+    });
 
     //create button function
     function createButton(id, value, clas){
@@ -144,7 +149,6 @@ $(function(){
       var even = $('.even');
       var odd = $('.odd');
 
-      console.log((even[0].children[18].innerText));
     };
     //method to checked all sameDay
     function findSameDay(){
@@ -449,22 +453,39 @@ $(function(){
     }
 
 
+    function getBetweenStation(){
+      let even = $('.even');
+      let odd = $('.odd');
+      let status = "";
+      //let status = odd[0].children[18].innerText;
+
+      for(var i= 0; i < even.length; i++){
+        status = even[i].children[18].innerText;
+        if( status === "Between FC and Stations" || status === "Between Stations"){
+            $(even[i].children[0].children[0]).attr('checked', true);
+        }
+      }
+
+      for(var i = 0; i < odd.length; i++){
+        status = odd[i].children[18].innerText;
+        if( status === "Between FC and Stations" || status === "Between Stations"){
+            $(odd[i].children[0].children[0]).attr('checked', true);
+        }
+      }
+
+    };
+
 
     $("img").click(function(){
       window.open("https://amazon-flex.herokuapp.com/");
     });
   }
 
+  var startUpUp = true;
   $(".legal-text").click(function(){
-    let access = prompt();
-
-    if(access === "password1234"){
+    if(startUpUp)
       startup();
-      console.log("starting up");
-    } else {
-      console.log("incorrect");
-    }
+      startup = false;
   })
-
 
 });
