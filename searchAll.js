@@ -34,6 +34,7 @@ $(function(){
      createButton("noRouteButton", "No Route") +
      createButton("findRouteButton", "Find Route") +
      createButton("excludeRouteButton", "Exclude Route") +
+     createButton("findStatus", "Find Status") +
      "</div>"
     );
     $('#ShipmentSearchTable').prepend(
@@ -116,6 +117,9 @@ $(function(){
     });
     $('#betweenStation').click(function(){
       getBetweenStation();
+    });
+    $('#findStatus').click(function(){
+      getStatus();
     });
 
     //create button function
@@ -513,6 +517,28 @@ $(function(){
         }
       }
 
+    };
+
+    function getStatus(){
+      let odd = $('.odd');
+      let even = $('.even');
+      let route = "";
+      let searchStatus = prompt("Enter Route to exclude:", "Enter Route here");
+      let reg = new RegExp(searchStatus);
+
+      for(let i = 0; i < odd.length; i++){
+        status = odd[i].children[18].innerText;
+        if(reg.test(status)){
+          $(odd[i].children[0].children[0]).attr('checked', true);
+        }
+      }
+
+      for(let i = 0; i < even.length; i++){
+        status = even[i].children[18].innerText;
+        if(reg.test(status)){
+          $(even[i].children[0].children[0]).attr('checked', true);
+        }
+      }
     };
 
 
