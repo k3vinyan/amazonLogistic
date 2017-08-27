@@ -523,7 +523,7 @@ $(function(){
       let odd = $('.odd');
       let even = $('.even');
       let route = "";
-      let searchStatus = prompt("Enter Route to exclude:", "Enter Route here");
+      let searchStatus = prompt("Enter Status to Search:", "Enter Status here");
       let reg = new RegExp(searchStatus);
 
       for(let i = 0; i < odd.length; i++){
