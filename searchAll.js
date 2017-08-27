@@ -16,7 +16,6 @@ $(function(){
 
     var recordArray = [];
 
-
    //append buttons to page
    $("#bodyContainer").before(
      "<div style='float:right; padding: -20px 30px 0 0; border-style: solid; border-color: #DDDDDD;'>" +
@@ -134,7 +133,6 @@ $(function(){
       return string;
     };
 
-
     //method to checked all objeects with corresponding status
     function findAll(status){
       var status;
@@ -246,25 +244,11 @@ $(function(){
       alert(string);
     }
 
-    //   for(var i = 0; i < array.length; i++){
-    //     company = array[i].company.split("/")[1];
-    //     if(company === compareCompany){
-    //
-    //     } else {
-    //       compareCompany = company;
-    //       string += array[i].route + " " + company + "\n";
-    //     }
-    //   }
-    //   console.log(string);
-    // }
-
    $(':checkbox').change(function() {
       $("#clearButton").click(function(){
         $('input:checkbox').removeAttr('checked');
       });
     });
-
-
 
     //create button with additonal options
     function optionButton(id, value, color, bgColor, padding){
@@ -328,6 +312,8 @@ $(function(){
         counterForFocus ++;
         truthValue = toggleOnOff(counterForFocus, switchForFocus);
         if(truthValue){
+          var route = prompt("Please enter the route:", "Enter route here" );
+          returnRoute(route);
           $('#focusButton').attr('value', 'FOCUS ONE ON');
           $('#focusButton').css('background-color', '#4C177D');
           $("#shipmentSearchId").keydown(keydownHandler);
@@ -338,6 +324,11 @@ $(function(){
           $("#shipmentSearchId").unbind('keydown', keydownHandler);
           $("#shipmentSearchIds").keydown(keydownHandler);
         }
+    }
+
+    var focusRoute = ""
+    function returnRoute(route){
+      focusRoute = route;
     }
 
     function toggleOnOff(counter, switcher){
@@ -397,7 +388,7 @@ $(function(){
     }
 
     function recordTBA(){
-      checkStatus();
+      checkStatus(focusRoute);
       let input = $("#shipmentSearchId").keypress();
 
       if(input[0].value.length == 15){
@@ -418,12 +409,13 @@ $(function(){
       }
     };
 
-    function checkStatus(){
+    function checkStatus(routeToSearch){
+      let routeSearch = routeToSearch;
       let odd = $('.odd');
       let status = odd[0].children[18].innerText;
-      let route = odd[0].children[16].innerText.replace(/[0-9]/g, '');
-      if( status === "Between FC and Stations" || status === "At Station"){
-        if (route === "V") {
+      let route = odd[0].children[16].innerText.replace(/[0-9]/g, '').toLowerCase();
+      if( status === "Between FC and Stations" || status === "At Station" || status === "Delayed at Station" || status === "Between Stations"){
+        if (route === routeSearch.toLowerCase()) {
           accept.play();
         }
       } else {
