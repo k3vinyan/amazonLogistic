@@ -213,7 +213,7 @@ $(function(){
           array.push(odd[i].children[2].children[0].innerText);
         }
       }
-      string = array.toString().replace(/,/g, "\n");
+      string = array.toString().replace(/,/g, "\n ");
       input = prompt("Ctrl + C to copy TBA(s)", string)
       if(input === null){
         return;
@@ -527,14 +527,16 @@ $(function(){
       let reg = new RegExp(searchStatus);
 
       for(let i = 0; i < odd.length; i++){
-        status = odd[i].children[18].innerText;
+        status = odd[i].children[18].innerText.toLowerCase();
+        console.log(status);
+        console.log(reg);
         if(reg.test(status)){
           $(odd[i].children[0].children[0]).attr('checked', true);
         }
       }
 
       for(let i = 0; i < even.length; i++){
-        status = even[i].children[18].innerText;
+        status = even[i].children[18].innerText.toLowerCase();
         if(reg.test(status)){
           $(even[i].children[0].children[0]).attr('checked', true);
         }
