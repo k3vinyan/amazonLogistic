@@ -415,10 +415,14 @@ $(function(){
       let route = odd[0].children[16].innerText.replace(/[0-9]/g, '').toLowerCase();
       if( status === "Between FC and Stations" || status === "At Station" || status === "Delayed at Station" || status === "Between Stations"){
         if (route === routeSearch.toLowerCase()) {
-          accept.play();
+          setTimeout(function(){
+            accept.play();
+          }, 1000);
         }
       } else {
-        buzzer.play();
+        setTimeout(function(){
+          buzzer.play();
+        }, 1000);
       }
     }
 
@@ -471,8 +475,6 @@ $(function(){
       for(let i = 0; i < odd.length; i++){
         route = odd[i].children[16].innerText;
         if(!reg.test(route) && odd[i].children[16].innerText != '\xa0'){
-          console.log(odd[i].children[16].innerText)
-          console.log(!(odd[i].children[16].innerText));
           $(odd[i].children[0].children[0]).attr('checked', true);
         }
       }
@@ -480,8 +482,6 @@ $(function(){
       for(let i = 0; i < even.length; i++){
         route = even[i].children[16].innerText;
         if(!reg.test(route) && even[i].children[16].innerText != '\xa0'){
-          console.log(odd[i].children[16].innerText)
-          console.log(even[i].children[16].innerText);
           $(even[i].children[0].children[0]).attr('checked', true);
         }
       }
