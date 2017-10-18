@@ -1,6 +1,5 @@
 $(function(){
 
-  function startup(){
     var accept = new Audio();
     var buzzer = new Audio();
 
@@ -535,17 +534,8 @@ $(function(){
       }
     };
 
-
     $("img").click(function(){
       window.open("https://amazon-flex.herokuapp.com/");
     });
-  }
-
-  var startUpUp = true;
-  $(".legal-text").click(function(){
-    if(startUpUp)
-      startup();
-      startup = false;
-  });
 
 });
