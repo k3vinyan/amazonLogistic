@@ -142,28 +142,77 @@ $(function(){
       getStatus();
     });
     $('#flexButton').click(function(){
-      if($(this).css('background-color')=='rgb(189, 189, 189)'){
-        $(this).css('background-color', '#336699');
-        const search = prompt("Please enter the route to search", "V").toUpperCase();
-        test(search);
-      } else {
-         $(this).css('background-color', '#BDBDBD');
-       }
+      runFlex();
     })
   $('#csvLink').click(function(e){
+      runCSV();
+  });
+
+  function runCSV(){
     var csv = CSVcreator(headers, FCArray, WTArray, flexArray);
 		var data = new Blob([csv]);
 		var a = document.getElementById("csvLink");
 		a.href = URL.createObjectURL(data);
-  });
-
-  function amazonFlex(){
-
   }
 
 
+  function runFlex(){
+    if($(this).css('background-color')=='rgb(189, 189, 189)'){
+      $(this).css('background-color', '#336699');
+      const search = prompt("Please enter the route to search", "V").toUpperCase();
+      amazonFlex(search);
+    } else {
+       $(this).css('background-color', '#BDBDBD');
+     }
+  }
 
+  function amazonFlex(search){
+    $('#shipmentSearchId').keydown(function(e){
 
+      if(e.keyCode == 13){
+        $("#shipmentSearchId").select();
+        $("#searchSubmit").click(function(){
+        });
+        const searchInput = $(this);
+        setTimeout(function(){
+          $("#shipmentSearchId").select();
+          const even = $('.even');
+          const odd = $('.odd');
+          const TBA = searchInput.val();
+          setTimeout(function(){
+            const status = odd[0].children[18].innerText;
+            const reason = odd[0].children[17].innerText;
+            const route = odd[0].children[16].innerText;
+            const routeStrip = route.replace(/\d/g,'');
+            if(TBA.length <= 16){
+              if(status === 'At Wrong Station' || status === 'Ready for Transfer'){
+                WTArray.push(TBA);
+                console.log('wrong station')
+                console.log(WTArray)
+                setTimeout(function(){
+                  buzzer.play();
+                }, 500)
+              } else if(status === 'Rejected' || status === 'Departed For FC' || status === 'Ready For FC'){
+               FCArray.push(TBA);
+               console.log('rejected')
+               console.log(FCArray)
+               setTimeout(function(){
+                 choco.play();
+               }, 500)
+             } else if(search == routeStrip){
+                setTimeout(function(){
+                  accept.play();
+                }, 500)
+              } else{
+                flexAudio.play();
+                flexArray.push(TBA);
+              }
+            }
+          }), 1000;
+        }, 1000);
+      }
+    })
+  }
 
 
   function CSVcreator(head, departedArray, wsArray, flexArray){
@@ -177,8 +226,6 @@ $(function(){
         csvContent += head[i] + ",";
       }
     }
-
-
     let maxLoop = 0;
 
     if(departedArray.length > wsArray.length){
@@ -216,57 +263,7 @@ $(function(){
     return csvContent;
   }
 
-  function test(search){
-      $('#shipmentSearchId').keydown(function(e){
 
-        if(e.keyCode == 13){
-          $("#shipmentSearchId").select();
-          $("#searchSubmit").click(function(){
-          });
-          const searchInput = $(this);
-          setTimeout(function(){
-            $("#shipmentSearchId").select();
-            const even = $('.even');
-            const odd = $('.odd');
-            const TBA = searchInput.val();
-            setTimeout(function(){
-              const status = odd[0].children[18].innerText;
-              const reason = odd[0].children[17].innerText;
-              const route = odd[0].children[16].innerText;
-              const routeStrip = route.replace(/\d/g,'');
-              if(TBA.length <= 16){
-                if(status === 'At Wrong Station' || status === 'Ready for Transfer'){
-                  WTArray.push(TBA);
-                  console.log('wrong station')
-                  console.log(WTArray)
-                  setTimeout(function(){
-                    buzzer.play();
-                  }, 500)
-                } else if(status === 'Rejected' || status === 'Departed For FC' || status === 'Ready For FC'){
-                 FCArray.push(TBA);
-                 console.log('rejected')
-                 console.log(FCArray)
-                 setTimeout(function(){
-                   choco.play();
-                 }, 500)
-               } else if(search == routeStrip){
-                  setTimeout(function(){
-                    accept.play();
-                  }, 500)
-                } else{
-                  flexAudio.play();
-                  flexArray.push(TBA);
-                }
-              }
-            }), 1000;
-          }, 1000);
-        }
-
-
-
-
-      })
-    }
     //create button function
     function createButton(id, value, clas){
       var id = id;
