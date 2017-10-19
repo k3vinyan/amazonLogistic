@@ -12,15 +12,13 @@ $(function(){
 
     let today = new Date();
     let todayFormat = (today.getMonth()+1).toString() + "." + (today.getDay().toString()) + "." + (today.getFullYear().toString());
-    console.log(todayFormat)
+
 
     //counter for focusOn
     var switchForFocus = false;
     var counterForFocus = 0;
-
     var switchForScanAll = false;
     var counterForScanAll = 0;
-
     var recordArray = [];
 
     //csv
@@ -142,7 +140,8 @@ $(function(){
       getStatus();
     });
     $('#flexButton').click(function(){
-      runFlex();
+      let that = $(this);
+      runFlex(that);
     })
   $('#csvLink').click(function(e){
       runCSV();
@@ -156,13 +155,13 @@ $(function(){
   }
 
 
-  function runFlex(){
-    if($(this).css('background-color')=='rgb(189, 189, 189)'){
-      $(this).css('background-color', '#336699');
+  function runFlex(that){
+    if(that.css('background-color')=='rgb(189, 189, 189)'){
+      that.css('background-color', '#336699');
       const search = prompt("Please enter the route to search", "V").toUpperCase();
       amazonFlex(search);
     } else {
-       $(this).css('background-color', '#BDBDBD');
+       that.css('background-color', '#BDBDBD');
      }
   }
 
@@ -187,15 +186,11 @@ $(function(){
             if(TBA.length <= 16){
               if(status === 'At Wrong Station' || status === 'Ready for Transfer'){
                 WTArray.push(TBA);
-                console.log('wrong station')
-                console.log(WTArray)
                 setTimeout(function(){
                   buzzer.play();
                 }, 500)
               } else if(status === 'Rejected' || status === 'Departed For FC' || status === 'Ready For FC'){
                FCArray.push(TBA);
-               console.log('rejected')
-               console.log(FCArray)
                setTimeout(function(){
                  choco.play();
                }, 500)
