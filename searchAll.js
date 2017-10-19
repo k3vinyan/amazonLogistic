@@ -1,10 +1,18 @@
 $(function(){
 
-    var accept = new Audio();
-    var buzzer = new Audio();
+    const accept = new Audio();
+    const buzzer = new Audio();
+    const choco  = new Audio();
+    const flexAudio = new Audio();
 
-    accept.src = "https://drive.google.com/uc?export=download&id=0B93xTaskz1_WMVhGcGJDR29xR0E";
-    buzzer.src = "https://drive.google.com/uc?export=download&id=0B93xTaskz1_WZ3l3V2NJeDdWMDg";
+    accept.src      = "https://drive.google.com/uc?export=download&id=0B93xTaskz1_WaE5GaXdScHNkRlk";
+    buzzer.src      = "https://drive.google.com/uc?export=download&id=0B93xTaskz1_WQ2lOYVBPTmVLbWM";
+    choco.src       = "https://drive.google.com/uc?export=download&id=0B93xTaskz1_WMEhrcGNSalAwMjQ";
+    flexAudio.src   = "https://drive.google.com/uc?export=download&id=0B93xTaskz1_WZkpyekVGRGxuZm8";
+
+    let today = new Date();
+    let todayFormat = (today.getMonth()+1).toString() + "." + (today.getDay().toString()) + "." + (today.getFullYear().toString());
+    console.log(todayFormat)
 
     //counter for focusOn
     var switchForFocus = false;
@@ -14,6 +22,13 @@ $(function(){
     var counterForScanAll = 0;
 
     var recordArray = [];
+
+    //csv
+    let headers = ["Departed To FC", "Milk Run", "FLEX"]
+    let WTArray = [];
+    let FCArray = [];
+    let flexArray = [];
+    let linkString = "<a href id='csvLink' download=" + todayFormat + ".csv" + " type='text/csv'>CSV</a>"
 
    //append buttons to page
    $("#bodyContainer").before(
@@ -35,11 +50,18 @@ $(function(){
      createButton("findStatus", "Find Status") +
      "</div>"
     );
+    // $('#ShipmentSearchTable').prepend(
+    //   optionButton('getRecordButton', 'GET FOCUS TBA', '#FFFFFF', '#BDBDBD', '5px')
+    // );
+    // $('#ShipmentSearchTable').prepend(
+    //   optionButton('focusAllButton', 'FOCUS ALL OFF', '#FFFFFF', '#BDBDBD', '5px')
+    // );
+
     $('#ShipmentSearchTable').prepend(
-      optionButton('getRecordButton', 'GET FOCUS TBA', '#FFFFFF', '#BDBDBD', '5px')
+      linkString
     );
     $('#ShipmentSearchTable').prepend(
-      optionButton('focusAllButton', 'FOCUS ALL OFF', '#FFFFFF', '#BDBDBD', '5px')
+      optionButton('flexButton', 'FLEX', '#FFFFFF', '#BDBDBD', '5px')
     );
     $('#ShipmentSearchTable').prepend(
       optionButton('focusButton', 'FOCUS ONE OFF', '#FFFFFF', '#BDBDBD', '5px')
@@ -119,7 +141,132 @@ $(function(){
     $('#findStatus').click(function(){
       getStatus();
     });
+    $('#flexButton').click(function(){
+      if($(this).css('background-color')=='rgb(189, 189, 189)'){
+        $(this).css('background-color', '#336699');
+        const search = prompt("Please enter the route to search", "V").toUpperCase();
+        test(search);
+      } else {
+         $(this).css('background-color', '#BDBDBD');
+       }
+    })
+  $('#csvLink').click(function(e){
+    var csv = CSVcreator(headers, FCArray, WTArray, flexArray);
+		var data = new Blob([csv]);
+		var a = document.getElementById("csvLink");
+		a.href = URL.createObjectURL(data);
+  });
 
+  function amazonFlex(){
+
+  }
+
+
+
+
+
+
+  function CSVcreator(head, departedArray, wsArray, flexArray){
+
+    let csvContent = "";
+
+    for(let i = 0; i < head.length; i++){
+      if(head.length-1 == i){
+        csvContent += head[i] + "\n";
+      } else {
+        csvContent += head[i] + ",";
+      }
+    }
+
+
+    let maxLoop = 0;
+
+    if(departedArray.length > wsArray.length){
+        if(departedArray.length > flexArray.length){
+          maxLoop = departedArray.length;
+        } else{
+          maxLoop = flexArray.length;
+        }
+    } else if(wsArray.length > flexArray.length){
+      maxLoop = wsArray.length;
+    } else {
+      maxLoop = flexArray.length;
+    }
+
+    for(let i = 0; i < maxLoop; i++){
+      if(departedArray[i] == undefined){
+        csvContent += " ,";
+      } else{
+        csvContent += departedArray[i] + ","
+      }
+
+      if(wsArray[i] == undefined){
+        csvContent += " ,";
+      } else{
+        csvContent += wsArray[i] + ","
+      }
+
+      if(flexArray[i] == undefined){
+        csvContent += "\n";
+      } else{
+        csvContent += flexArray[i] + "\n"
+      }
+
+    }
+    return csvContent;
+  }
+
+  function test(search){
+      $('#shipmentSearchId').keydown(function(e){
+
+        if(e.keyCode == 13){
+          $("#shipmentSearchId").select();
+          $("#searchSubmit").click(function(){
+          });
+          const searchInput = $(this);
+          setTimeout(function(){
+            $("#shipmentSearchId").select();
+            const even = $('.even');
+            const odd = $('.odd');
+            const TBA = searchInput.val();
+            setTimeout(function(){
+              const status = odd[0].children[18].innerText;
+              const reason = odd[0].children[17].innerText;
+              const route = odd[0].children[16].innerText;
+              const routeStrip = route.replace(/\d/g,'');
+              if(TBA.length <= 16){
+                if(status === 'At Wrong Station' || status === 'Ready for Transfer'){
+                  WTArray.push(TBA);
+                  console.log('wrong station')
+                  console.log(WTArray)
+                  setTimeout(function(){
+                    buzzer.play();
+                  }, 500)
+                } else if(status === 'Rejected' || status === 'Departed For FC' || status === 'Ready For FC'){
+                 FCArray.push(TBA);
+                 console.log('rejected')
+                 console.log(FCArray)
+                 setTimeout(function(){
+                   choco.play();
+                 }, 500)
+               } else if(search == routeStrip){
+                  setTimeout(function(){
+                    accept.play();
+                  }, 500)
+                } else{
+                  flexAudio.play();
+                  flexArray.push(TBA);
+                }
+              }
+            }), 1000;
+          }, 1000);
+        }
+
+
+
+
+      })
+    }
     //create button function
     function createButton(id, value, clas){
       var id = id;
@@ -150,11 +297,6 @@ $(function(){
       }
     };
 
-    function flex(){
-      var even = $('.even');
-      var odd = $('.odd');
-
-    };
     //method to checked all sameDay
     function findSameDay(){
       var even = $('.even');
@@ -348,7 +490,7 @@ $(function(){
         });
         setTimeout(function(){
           $("#shipmentSearchId").select();
-          recordTBA();
+          //recordTBA();
         }, 1000);
       }
 
