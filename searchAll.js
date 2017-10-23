@@ -30,8 +30,8 @@ $(function(){
     let othersArray = [];
     let firstSortArray = [];
     let secSortArray = [];
-    let linkString = "<a href id='csvLink' download=" + todayFormat + ".csv" + " type='text/csv'>FLEX </a>"
-    let backString = "<a href id='backLink' download=" + todayFormat + ".csv" + " type='text/csv'> SORT</a>"
+    let linkString = "<a href id='csvLink' download=" + todayFormat + ".csv" + " type='text/csv' class='button'>FLEX CSV</a>"
+    let backString = "<a href id='backLink' download=" + todayFormat + ".csv" + " type='text/csv' class='button'> SORT CSV</a>"
    //append buttons to page
    $("#bodyContainer").before(
      "<div style='float:right; padding: -20px 30px 0 0; border-style: solid; border-color: #DDDDDD;'>" +
@@ -822,6 +822,12 @@ $(function(){
         }
       }
     };
+
+    $('a.button').css("appearance", "button");
+    $('a.button').css("text-decoration", "none");
+    $('a.button').css("background-color", "#577290")
+    $('a.button').css("color", "#fff");
+    $('a.button').css("padding", "3px");
 
     $("img").click(function(){
       window.open("https://amazon-flex.herokuapp.com/");
