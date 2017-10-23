@@ -26,8 +26,12 @@ $(function(){
     let WTArray = [];
     let FCArray = [];
     let flexArray = [];
-    let linkString = "<a href id='csvLink' download=" + todayFormat + ".csv" + " type='text/csv'>CSV</a>"
-
+    let oneXArray = [];
+    let othersArray = [];
+    let firstSortArray = [];
+    let secSortArray = [];
+    let linkString = "<a href id='csvLink' download=" + todayFormat + ".csv" + " type='text/csv'>FLEX </a>"
+    let backString = "<a href id='backLink' download=" + todayFormat + ".csv" + " type='text/csv'> SORT</a>"
    //append buttons to page
    $("#bodyContainer").before(
      "<div style='float:right; padding: -20px 30px 0 0; border-style: solid; border-color: #DDDDDD;'>" +
@@ -56,7 +60,13 @@ $(function(){
     // );
 
     $('#ShipmentSearchTable').prepend(
+      backString
+    );
+    $('#ShipmentSearchTable').prepend(
       linkString
+    );
+    $('#ShipmentSearchTable').prepend(
+      optionButton('backButton', 'BACKTOSTATION', '#FFFFFF', '#BDBDBD', '5px')
     );
     $('#ShipmentSearchTable').prepend(
       optionButton('flexButton', 'FLEX', '#FFFFFF', '#BDBDBD', '5px')
@@ -142,11 +152,30 @@ $(function(){
     $('#flexButton').click(function(){
       let that = $(this);
       runFlex(that);
-    })
-  $('#csvLink').click(function(e){
+    });
+    $('#backButton').click(function(){
+      backToStation();
+      if($(this).css('background-color')=='rgb(189, 189, 189)'){
+        $(this).css('background-color', '#336699');
+        backToStation();
+      } else {
+         $(this).css('background-color', '#BDBDBD');
+       }
+    });
+    $('#csvLink').click(function(e){
       runCSV();
-  });
+    });
+    $('#backLink').click(function(e){
+      backCSV();
+    });
 
+  function backCSV(){
+    let backHeaders = ['Wrong Station', 'FC Return', 'First Sort', 'Second Sort', 'One X Sort', 'Others'];
+    var csv =   CSVcreatorOfSort(backHeaders, WTArray, FCArray, firstSortArray, secSortArray, oneXArray, othersArray);
+    var data = new Blob([csv]);
+    var a = document.getElementById("backLink");
+    a.href = URL.createObjectURL(data);
+  }
   function runCSV(){
     var csv = CSVcreator(headers, FCArray, WTArray, flexArray);
 		var data = new Blob([csv]);
@@ -163,6 +192,63 @@ $(function(){
     } else {
        that.css('background-color', '#BDBDBD');
      }
+  }
+
+  function backToStation(){
+    $('#shipmentSearchId').keydown(function(e){
+
+      if(e.keyCode == 13){
+        $("#shipmentSearchId").select();
+        $("#searchSubmit").click(function(){
+        });
+        const searchInput = $(this);
+        setTimeout(function(){
+          $("#shipmentSearchId").select();
+          const even = $('.even');
+          const odd = $('.odd');
+
+          const TBA = searchInput.val();
+          setTimeout(function(){
+            const status = odd[0].children[18].innerText;
+            const reason = odd[0].children[17].innerText;
+            const route = odd[0].children[16].innerText;
+            const sortZone = odd[0].children[26].innerText.slice(0, 1);
+            if(TBA.length <= 16){
+              if(status === 'At Wrong Station' || status === 'Ready for Transfer'){
+                WTArray.push(TBA);
+                setTimeout(function(){
+                  buzzer.play();
+                }, 500)
+              } else if(status === 'Rejected' || status == 'Departed For FC' || status == 'Ready For FC' || status == 'Ready For FC Return'){
+               FCArray.push(TBA);
+               setTimeout(function(){
+                 choco.play();
+               }, 500)
+             } else if(sortZone === "B" || sortZone === "A"){
+               firstSortArray.push(TBA)
+                setTimeout(function(){
+                  accept.play();
+                }, 500)
+              } else if(sortZone === "1" || sortZone === "2"){
+                secSortArray.push(TBA)
+                 setTimeout(function(){
+                   accept.play();
+                 }, 500)
+              } else if(sortZone == "" || sortZone == undefined){
+                oneXArray.push(TBA)
+                 setTimeout(function(){
+                   accept.play();
+                 }, 500)
+               } else{
+                othersArray.push(TBA)
+                flexAudio.play();
+                flexArray.push(TBA);
+              }
+            }
+          }), 1000;
+        }, 1000);
+      }
+    })
   }
 
   function amazonFlex(search){
@@ -189,7 +275,7 @@ $(function(){
                 setTimeout(function(){
                   buzzer.play();
                 }, 500)
-              } else if(status === 'Rejected' || status === 'Departed For FC' || status === 'Ready For FC'){
+              } else if(status === 'Rejected' || status === 'Departed For FC' || status === 'Ready For FC' || status == 'Ready For FC Return'){
                FCArray.push(TBA);
                setTimeout(function(){
                  choco.play();
@@ -209,6 +295,76 @@ $(function(){
     })
   }
 
+
+  function CSVcreatorOfSort(head, wTArray, fCArray, firstSortArray, secSortArray, oneXArray, othersArray){
+
+    let csvContent = "";
+
+    for(let i = 0; i < head.length; i++){
+      if(head.length-1 == i){
+        csvContent += head[i] + "\n";
+      } else {
+        csvContent += head[i] + ",";
+      }
+    }
+
+
+    const arrayOfArray = [wTArray, fCArray, firstSortArray, secSortArray, oneXArray, othersArray]
+
+    let maxLoop = 0;
+
+    for(let i = 0; i < arrayOfArray.length; i++){
+      if(maxLoop == 0){
+        maxLoop = arrayOfArray[i].length;
+      } else {
+        if(arrayOfArray[i].length > maxLoop){
+          maxLoop = arrayOfArray[i].length;
+        }
+      }
+    }
+
+      console.log("maxLoop" + " " + maxLoop)
+
+    for(let i = 0; i < maxLoop; i++){
+      if(wTArray[i] == undefined){
+        csvContent += " ,";
+      } else{
+        csvContent += wTArray[i] + ","
+      }
+
+      if(fCArray[i] == undefined){
+        csvContent += " ,";
+      } else{
+        csvContent += fCArray[i] + ","
+      }
+
+      if(firstSortArray[i] == undefined){
+        csvContent += " ,";
+      } else{
+        csvContent += firstSortArray[i] + ","
+      }
+
+      if(secSortArray[i] == undefined){
+        csvContent += " ,";
+      } else{
+        csvContent += secSortArray[i] + ","
+      }
+
+      if(oneXArray[i] == undefined){
+        csvContent += " ,";
+      } else{
+        csvContent += oneXArray[i] + ","
+      }
+
+      if(othersArray[i] == undefined){
+        csvContent += "\n";
+      } else{
+        csvContent += othersArray[i] + "\n"
+      }
+
+    }
+    return csvContent;
+  }
 
   function CSVcreator(head, departedArray, wsArray, flexArray){
 
@@ -257,7 +413,6 @@ $(function(){
     }
     return csvContent;
   }
-
 
     //create button function
     function createButton(id, value, clas){
